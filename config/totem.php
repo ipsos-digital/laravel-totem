@@ -234,4 +234,17 @@ return [
         'enabled' => env('TOTEM_BROADCASTING_ENABLED', true),
         'channel' => env('TOTEM_BROADCASTING_CHANNEL', 'task.events'),
     ],
+
+    'cache' => [
+        'enabled' => env('TOTEM_CACHE_ENABLED', true),
+    ],
+
+    'overlapping' => [
+        'mutex_expiry' => env('TOTEM_OVERLAPPING_MUTEX_EXPIRY', 1440), // in minutes
+    ],
+
+    'pagination' => [
+        'tasks_per_page' => env('TOTEM_TASKS_PER_PAGE', 20),
+        'results_per_page' => env('TOTEM_RESULTS_PER_PAGE', 10),
+    ],
 ];

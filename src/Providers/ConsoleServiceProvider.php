@@ -47,7 +47,7 @@ class ConsoleServiceProvider extends ServiceProvider
                     Executed::dispatch($task, $event->start ?? microtime(true), $output);
                 });
             if ($task->dont_overlap) {
-                $event->withoutOverlapping();
+                $event->withoutOverlapping(config('totem.overlapping.mutex_expiry'));
             }
             if ($task->run_in_maintenance) {
                 $event->evenInMaintenanceMode();

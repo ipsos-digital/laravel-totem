@@ -49,7 +49,7 @@ class TasksController extends Controller
                     $query->where('description', 'LIKE', '%'.request('q').'%');
                 })
                 ->with('frequencies')
-                ->paginate(20),
+                ->paginate(config('totem.pagination.tasks_per_page')),
         ]);
     }
 

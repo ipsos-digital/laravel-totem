@@ -216,7 +216,7 @@ class Task extends TotemModel
             } else {
                 do {
                     $rowsToDelete = $this->results()
-                        ->where('ran_at', '<', Carbon::now()->subDays($this->auto_cleanup_num - 1))
+                        ->where('ran_at', '<', Carbon::now()->subDays($this->auto_cleanup_num))
                         ->limit(50)
                         ->getQuery()
                         ->select('id')

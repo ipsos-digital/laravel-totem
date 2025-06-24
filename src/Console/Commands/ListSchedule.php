@@ -62,7 +62,7 @@ class ListSchedule extends Command
                     'one_server' => $event->onOneServer ? 'Yes' : 'No',
                     'in_background' => $event->runInBackground ? 'Yes' : 'No',
                 ];
-            });
+            })->sortBy(['description']);
 
             $this->table(
                 ['Description', 'Command', 'Schedule', 'Upcoming', 'Timezone', 'Overlaps?', 'In Maintenance?', 'One Server?', 'In Background?'],

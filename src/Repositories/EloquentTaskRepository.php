@@ -54,9 +54,13 @@ class EloquentTaskRepository implements TaskInterface
             return $id;
         }
 
-        return Cache::rememberForever('totem.task.'.$id, function () use ($id) {
+        if (config('totem.cache.enabled')) {
+            return Cache::rememberForever('totem.task.'.$id, function () use ($id) {
+                return Task::query()->with('frequencies')->find($id);
+            });
+        } else {
             return Task::query()->with('frequencies')->find($id);
-        });
+        }
     }
 
     /**
@@ -66,9 +70,13 @@ class EloquentTaskRepository implements TaskInterface
      */
     public function findAll(): Collection
     {
-        return Cache::rememberForever('totem.tasks.all', function () {
+        if (config('totem.cache.enabled')) {
+            return Cache::rememberForever('totem.tasks.all', function () {
+                return Task::query()->with('frequencies')->get();
+            });
+        } else {
             return Task::query()->with('frequencies')->get();
-        });
+        }
     }
 
     /**
@@ -78,11 +86,17 @@ class EloquentTaskRepository implements TaskInterface
      */
     public function findAllActive(): Collection
     {
-        return Cache::rememberForever('totem.tasks.active', function () {
+        if (config('totem.cache.enabled')) {
+            return Cache::rememberForever('totem.tasks.active', function () {
+                return $this->findAll()->filter(function ($task) {
+                    return $task->is_active;
+                });
+            });
+        } else {
             return $this->findAll()->filter(function ($task) {
                 return $task->is_active;
             });
-        });
+        }
     }
 
     /**
@@ -209,12 +223,16 @@ class EloquentTaskRepository implements TaskInterface
      */
     public function import($input): void
     {
-        Cache::forget('totem.tasks.all');
-        Cache::forget('totem.tasks.active');
+        if (config('totem.cache.enabled')) {
+            Cache::forget('totem.tasks.all');
+            Cache::forget('totem.tasks.active');
+        }
 
         collect(json_decode(Arr::get($input, 'content')))
             ->each(function ($data) {
-                Cache::forget('totem.task.'.$data->id);
+                if (config('totem.cache.enabled')) {
+                    Cache::forget('totem.task.'.$data->id);
+                }
 
                 $task = $this->find($data->id);
 
