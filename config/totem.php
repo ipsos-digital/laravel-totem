@@ -246,5 +246,8 @@ return [
     'pagination' => [
         'tasks_per_page' => env('TOTEM_TASKS_PER_PAGE', 20),
         'results_per_page' => env('TOTEM_RESULTS_PER_PAGE', 10),
+        'results_per_page_by_command' => [
+            //'command_and_parameters*' => 5,
+        ],
     ],
 ];

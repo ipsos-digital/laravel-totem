@@ -112,7 +112,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                @forelse($results = $task->results()->orderByDesc('created_at')->paginate(config('totem.pagination.results_per_page')) as $result)
+                @php
+                $intResultsPerPage = max(config('totem.pagination.results_per_page'), 1);
+                $arrResultsPerPageByCommand = config('totem.pagination.results_per_page_by_command');
+                $strResultsPerPageByCommandKeyToSearch = trim($task->command . ' ' . ($task->parameters ?? ''));
+                if (is_array($arrResultsPerPageByCommand)) {
+                    foreach ($arrResultsPerPageByCommand as $strCommandMatchTmp => $intResultsPerPageTmp) {
+                        if (fnmatch($strCommandMatchTmp, $strResultsPerPageByCommandKeyToSearch, FNM_CASEFOLD)) {
+                            $intResultsPerPage = max((int) $intResultsPerPageTmp, 1);
+                            break;
+                        }
+                    }
+                }
+                @endphp
+                @forelse($results = $task->results()->orderByDesc('created_at')->paginate($intResultsPerPage) as $result)
                     <tr>
                         <td>{{$result->ran_at->toDateTimeString()}}</td>
                         <td>{{ number_format($result->duration / 1000 , 2)}} seconds</td>
