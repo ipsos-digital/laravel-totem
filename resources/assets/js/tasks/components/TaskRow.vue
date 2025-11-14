@@ -1,7 +1,7 @@
 <template>
     <tr :class="task.is_active ? '' : 'uk-text-danger'">
         <td>
-            <a :href="showHref">
+            <a :href="showHref" :title="taskTitle">
                 {{ description }}
             </a>
             <span class="uk-float-right uk-hidden@s uk-text-muted">Command</span>
@@ -52,6 +52,10 @@
         computed: {
             description() {
                 return this.task.description.substring(0,29);
+            },
+
+            taskTitle() {
+                return this.task.description + "\n\n" + this.task.command + ' ' + (this.task.parameters || '');
             },
 
             averageDurationInSeconds() {
