@@ -37,6 +37,7 @@ class Result extends TotemModel
             ->whereColumn('task_id', TOTEM_TABLE_PREFIX.'tasks.id')
             ->latest()
             ->limit(1)
+            ->forceIndex('task_results_task_id_idx')
             ->getQuery();
     }
 
@@ -47,6 +48,7 @@ class Result extends TotemModel
     {
         return $this->select(DB::raw('avg(duration)'))
             ->whereColumn('task_id', TOTEM_TABLE_PREFIX.'tasks.id')
+            ->forceIndex('task_results_task_id_idx')
             ->getQuery();
     }
 
