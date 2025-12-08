@@ -15,7 +15,9 @@ class ExportTasksTest extends TestCase
         $exportedTasks = $this->signIn()
             ->get(route('totem.tasks.export'))
             ->assertHeader('Content-Disposition', 'attachment; filename=tasks.json')
-            ->assertHeader('Content-Type', 'text/json; charset=UTF-8')
+            ->assertHeader('Content-Type', function ($value) {
+                return strtolower($value) === 'text/json; charset=utf-8';
+            })
             ->streamedContent();
 
         $exportedTasks = json_decode($exportedTasks);
