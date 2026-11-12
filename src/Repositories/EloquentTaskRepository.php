@@ -66,7 +66,7 @@ class EloquentTaskRepository implements TaskInterface
 
         return $this->cache()->rememberForever('totem.task.'.$id, function () use ($id) {
             return Task::query()->with('frequencies')->find($id);
-        }
+        });
     }
 
     /**
@@ -78,7 +78,7 @@ class EloquentTaskRepository implements TaskInterface
     {
         return $this->cache()->rememberForever('totem.tasks.all', function () {
             return Task::query()->with('frequencies')->get();
-        }
+        });
     }
 
     /**
@@ -92,7 +92,7 @@ class EloquentTaskRepository implements TaskInterface
             return $this->findAll()->filter(function ($task) {
                 return $task->is_active;
             });
-        }
+        });
     }
 
     /**
