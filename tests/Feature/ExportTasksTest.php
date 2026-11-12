@@ -13,13 +13,10 @@ class ExportTasksTest extends TestCase
         $tasks = Task::factory()->count(5)->create();
 
         $response = $this->signIn()
-            ->get(route('totem.tasks.export'));
+            ->get(route('totem.tasks.export'))
+            ->assertHeader('Content-Disposition', 'attachment; filename=tasks.json');
 
-        $response->assertHeader('Content-Disposition', 'attachment; filename=tasks.json');
-
-        // Case-insensitive Content-Type check
-        $contentType = $response->headers->get('Content-Type') ?? $response->headers->get('content-type');
-        $this->assertEquals('text/json; charset=utf-8', strtolower($contentType));
+        $this->assertEquals('text/json; charset=utf-8', strtolower($response->headers->get('Content-Type')));
 
         $exportedTasks = $response->streamedContent();
 
