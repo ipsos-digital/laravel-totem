@@ -235,9 +235,7 @@ return [
         'channel' => env('TOTEM_BROADCASTING_CHANNEL', 'task.events'),
     ],
 
-    'cache' => [
-        'enabled' => env('TOTEM_CACHE_ENABLED', true),
-    ],
+    'cache_store' => env('TOTEM_CACHE_STORE', null),
 
     'overlapping' => [
         'mutex_expiry' => env('TOTEM_OVERLAPPING_MUTEX_EXPIRY', 1440), // in minutes
